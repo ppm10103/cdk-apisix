@@ -5,7 +5,7 @@
 
 # cdk-apisix
 
-CDK construct library to generate [Apache APISIX](https://github.com/apache/apisix) workload on AWS Fargate.
+CDK construct library to generate serverless [Apache APISIX](https://github.com/apache/apisix) workload on AWS Fargate.
 
 # sample
 

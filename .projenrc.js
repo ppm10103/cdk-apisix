@@ -6,6 +6,7 @@ const project = new AwsCdkConstructLibrary({
   cdkVersion: '1.77.0',
   name: 'cdk-apisix',
   repository: 'https://github.com/pahud/cdk-apisix.git',
+  releaseBranches: ['main'],
   cdkDependencies: [
     '@aws-cdk/core',
     '@aws-cdk/aws-ec2',

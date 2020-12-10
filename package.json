@@ -2,7 +2,7 @@
   "name": "cdk-apisix",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pahudnet/cdk-apisix.git"
+    "url": "https://github.com/pahud/cdk-apisix.git"
   },
   "bin": {},
   "scripts": {
@@ -28,7 +28,7 @@
     "organization": false
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.73.0",
+    "@aws-cdk/assert": "^1.77.0",
     "@types/jest": "^26.0.18",
     "@types/node": "^10.17.0",
     "@typescript-eslint/eslint-plugin": "^4.3.0",
@@ -51,9 +51,26 @@
     "typescript": "^3.9.5"
   },
   "peerDependencies": {
+    "@aws-cdk/aws-ec2": "^1.77.0",
+    "@aws-cdk/aws-ecs": "^1.77.0",
+    "@aws-cdk/aws-ecs-patterns": "^1.77.0",
+    "@aws-cdk/aws-efs": "^1.77.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "^1.77.0",
+    "@aws-cdk/aws-iam": "^1.77.0",
+    "@aws-cdk/aws-logs": "^1.77.0",
+    "@aws-cdk/core": "^1.77.0",
     "constructs": "^3.2.27"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@aws-cdk/aws-ec2": "^1.77.0",
+    "@aws-cdk/aws-ecs": "^1.77.0",
+    "@aws-cdk/aws-ecs-patterns": "^1.77.0",
+    "@aws-cdk/aws-efs": "^1.77.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "^1.77.0",
+    "@aws-cdk/aws-iam": "^1.77.0",
+    "@aws-cdk/aws-logs": "^1.77.0",
+    "@aws-cdk/core": "^1.77.0"
+  },
   "bundledDependencies": [],
   "keywords": [
     "cdk"
@@ -95,7 +112,12 @@
   "stability": "stable",
   "jsii": {
     "outdir": "dist",
-    "targets": {},
+    "targets": {
+      "python": {
+        "distName": "cdk-apisix",
+        "module": "cdk_apisix"
+      }
+    },
     "tsc": {
       "outDir": "lib",
       "rootDir": "src"

@@ -43,6 +43,9 @@ junit.xml
 /dist
 .jsii
 tsconfig.json
+cdk.out
+cdk.context.json
+yarn-error.log
 !/.projen/tasks.json
 !/package.json
 !/.npmignore

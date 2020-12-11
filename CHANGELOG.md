@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.6 (2020-12-11)
+
+
+### Features
+
+* **core:** support create webservce ([#3](https://github.com/pahud/cdk-apisix/issues/3)) ([724d1d6](https://github.com/pahud/cdk-apisix/commit/724d1d6f51b7ae0288f85b9c7195e55dc4fa0a01))
+
 ### 0.0.5 (2020-12-11)
 
 

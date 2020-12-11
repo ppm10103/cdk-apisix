@@ -44,8 +44,6 @@ export class Apisix extends cdk.Construct {
 
     const apisix = taskDefinition
       .addContainer('apisix', {
-        // image: ecs.ContainerImage.fromRegistry('public.ecr.aws/d7p2r8s3/apisix'),
-        // image: ecs.ContainerImage.fromAsset(path.join(__dirname, '../apisix_container')),
         image: props.apisixContainer,
         logging: new ecs.AwsLogDriver({
           streamPrefix: 'apisix',
@@ -81,11 +79,9 @@ export class Apisix extends cdk.Construct {
 
     const etcdContainer = taskDefinition
       .addContainer('etcd', {
-        // image: ContainerImage.fromRegistry('gcr.azk8s.cn/etcd-development/etcd:v3.3.12'),
-        // image: ecs.ContainerImage.fromRegistry('public.ecr.aws/bitnami/etcd:3.4.14'),
         image: props.etcdContainer,
         environment: {
-          // ETCD_DATA_DIR: '/etcd_data',
+          ETCD_DATA_DIR: '/etcd_data',
           ETCD_ENABLE_V2: 'true',
           ALLOW_NONE_AUTHENTICATION: 'yes',
           ETCD_ADVERTISE_CLIENT_URLS: 'http://0.0.0.0:2379',
@@ -113,7 +109,6 @@ export class Apisix extends cdk.Construct {
 
     // add dashboard container
     const dashboard = taskDefinition.addContainer('dashboard', {
-      // image: ecs.ContainerImage.fromAsset(path.join(__dirname, '../apisix_dashboard')),
       image: props.dashboardContainer,
       logging: new ecs.AwsLogDriver({
         streamPrefix: 'dashboard',

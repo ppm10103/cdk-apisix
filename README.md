@@ -7,6 +7,8 @@
 
 CDK construct library to generate serverless [Apache APISIX](https://github.com/apache/apisix) workload on AWS Fargate.
 
+![](images/apisix-fargate-cdk.png)
+
 # sample
 
 ```ts

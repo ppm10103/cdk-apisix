@@ -18,7 +18,7 @@ export class IntegTesting {
 
     new Apisix(stack, 'apisix-demo', {
       apisixContainer: ContainerImage.fromAsset(path.join(__dirname, '../apisix_container')),
-      etcdContainer: ContainerImage.fromRegistry('public.ecr.aws/bitnami/etcd:3.4.14'),
+      etcdContainer: ContainerImage.fromRegistry('public.ecr.aws/eks-distro/etcd-io/etcd:v3.4.14-eks-1-18-1'),
       dashboardContainer: ContainerImage.fromAsset(path.join(__dirname, '../apisix_dashboard')),
     });
 

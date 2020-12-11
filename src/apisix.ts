@@ -10,7 +10,7 @@ import * as cdk from '@aws-cdk/core';
 const DEFAULTS = {
   apisixContainer: 'public.ecr.aws/d7p2r8s3/apisix',
   etcdContainer: 'public.ecr.aws/eks-distro/etcd-io/etcd:v3.4.14-eks-1-18-1',
-  dashboardContainer: 'public.ecr.aws/d7p2r8s3/apisix-dashboard',
+  dashboardContainer: 'public.ecr.aws/d7p2r8s3/apisix-dashboard:v2.1.1',
 };
 
 /**

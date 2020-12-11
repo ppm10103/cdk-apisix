@@ -13,7 +13,7 @@ export class IntegTesting {
 
     const app = new cdk.App();
 
-    const stack = new cdk.Stack(app, 'ApiSixDemoStack', { env: devEnv });
+    const stack = new cdk.Stack(app, 'ApiSixDemoStack2', { env: devEnv });
 
     const apisix = new Apisix(stack, 'apisix-demo');
 

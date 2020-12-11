@@ -19,10 +19,10 @@ Object {
         ],
       },
     },
-    "apisixdemoFlaskServiceLoadBalancerDNS68A0C859": Object {
+    "apisixdemoserviceflaskLoadBalancerDNS8F46E711": Object {
       "Value": Object {
         "Fn::GetAtt": Array [
-          "apisixdemoFlaskServiceLB145BE4B5",
+          "apisixdemoserviceflaskLBFE4E88D0",
           "DNSName",
         ],
       },
@@ -376,148 +376,6 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
-    "apisixdemoFlaskService8DA04212": Object {
-      "DependsOn": Array [
-        "apisixdemoFlaskServiceLBPublicListenerECSGroup6AB77773",
-        "apisixdemoFlaskServiceLBPublicListener8330DF18",
-      ],
-      "Properties": Object {
-        "Cluster": Object {
-          "Ref": "apisixdemoClusterFA832B41",
-        },
-        "DeploymentConfiguration": Object {
-          "MaximumPercent": 200,
-          "MinimumHealthyPercent": 50,
-        },
-        "DesiredCount": 1,
-        "EnableECSManagedTags": false,
-        "HealthCheckGracePeriodSeconds": 60,
-        "LaunchType": "FARGATE",
-        "LoadBalancers": Array [
-          Object {
-            "ContainerName": "flask",
-            "ContainerPort": 80,
-            "TargetGroupArn": Object {
-              "Ref": "apisixdemoFlaskServiceLBPublicListenerECSGroup6AB77773",
-            },
-          },
-        ],
-        "NetworkConfiguration": Object {
-          "AwsvpcConfiguration": Object {
-            "AssignPublicIp": "ENABLED",
-            "SecurityGroups": Array [
-              Object {
-                "Fn::GetAtt": Array [
-                  "apisixdemoFlaskServiceSecurityGroup4E9C89FC",
-                  "GroupId",
-                ],
-              },
-            ],
-            "Subnets": Array [
-              Object {
-                "Ref": "apisixdemoVpcPublicSubnet1Subnet2EB6ADD3",
-              },
-              Object {
-                "Ref": "apisixdemoVpcPublicSubnet2SubnetB18C7139",
-              },
-            ],
-          },
-        },
-        "TaskDefinition": Object {
-          "Ref": "apisixdemoTaskFlask71E37A1D",
-        },
-      },
-      "Type": "AWS::ECS::Service",
-    },
-    "apisixdemoFlaskServiceLB145BE4B5": Object {
-      "DependsOn": Array [
-        "apisixdemoVpcPublicSubnet1DefaultRoute85B3E562",
-        "apisixdemoVpcPublicSubnet2DefaultRoute746A97C7",
-      ],
-      "Properties": Object {
-        "LoadBalancerAttributes": Array [
-          Object {
-            "Key": "deletion_protection.enabled",
-            "Value": "false",
-          },
-          Object {
-            "Key": "load_balancing.cross_zone.enabled",
-            "Value": "true",
-          },
-        ],
-        "Scheme": "internet-facing",
-        "Subnets": Array [
-          Object {
-            "Ref": "apisixdemoVpcPublicSubnet1Subnet2EB6ADD3",
-          },
-          Object {
-            "Ref": "apisixdemoVpcPublicSubnet2SubnetB18C7139",
-          },
-        ],
-        "Type": "network",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
-    },
-    "apisixdemoFlaskServiceLBPublicListener8330DF18": Object {
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
-              "Ref": "apisixdemoFlaskServiceLBPublicListenerECSGroup6AB77773",
-            },
-            "Type": "forward",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "apisixdemoFlaskServiceLB145BE4B5",
-        },
-        "Port": 80,
-        "Protocol": "TCP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "apisixdemoFlaskServiceLBPublicListenerECSGroup6AB77773": Object {
-      "Properties": Object {
-        "Port": 80,
-        "Protocol": "TCP",
-        "TargetGroupAttributes": Array [
-          Object {
-            "Key": "deregistration_delay.timeout_seconds",
-            "Value": "30",
-          },
-        ],
-        "TargetType": "ip",
-        "VpcId": Object {
-          "Ref": "apisixdemoVpc276C38A9",
-        },
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-    },
-    "apisixdemoFlaskServiceSecurityGroup4E9C89FC": Object {
-      "Properties": Object {
-        "GroupDescription": "ApiSixDemoStack/apisix-demo/FlaskService/Service/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "from 0.0.0.0/0:80",
-            "FromPort": 80,
-            "IpProtocol": "tcp",
-            "ToPort": 80,
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "apisixdemoVpc276C38A9",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
     "apisixdemoTaskApiSixB021C7B6": Object {
       "Properties": Object {
         "ContainerDefinitions": Array [
@@ -529,25 +387,7 @@ Object {
               },
             ],
             "Essential": true,
-            "Image": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  Object {
-                    "Ref": "AWS::AccountId",
-                  },
-                  ".dkr.ecr.",
-                  Object {
-                    "Ref": "AWS::Region",
-                  },
-                  ".",
-                  Object {
-                    "Ref": "AWS::URLSuffix",
-                  },
-                  "/aws-cdk/assets:60d6dea5b222e023a35deee4bf4a7ee1a2081f508cf083b419cd8d5100960c92",
-                ],
-              ],
-            },
+            "Image": "public.ecr.aws/d7p2r8s3/apisix",
             "LogConfiguration": Object {
               "LogDriver": "awslogs",
               "Options": Object {
@@ -628,25 +468,7 @@ Object {
               },
             ],
             "Essential": true,
-            "Image": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  Object {
-                    "Ref": "AWS::AccountId",
-                  },
-                  ".dkr.ecr.",
-                  Object {
-                    "Ref": "AWS::Region",
-                  },
-                  ".",
-                  Object {
-                    "Ref": "AWS::URLSuffix",
-                  },
-                  "/aws-cdk/assets:14657be6504fab3a81cf5e370ca75f2fb2c601f04c4c69c00d91491b917c7459",
-                ],
-              ],
-            },
+            "Image": "public.ecr.aws/d7p2r8s3/apisix-dashboard",
             "LogConfiguration": Object {
               "LogDriver": "awslogs",
               "Options": Object {
@@ -721,39 +543,6 @@ Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
-            Object {
-              "Action": Array [
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:BatchGetImage",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":ecr:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":repository/aws-cdk/assets",
-                  ],
-                ],
-              },
-            },
-            Object {
-              "Action": "ecr:GetAuthorizationToken",
-              "Effect": "Allow",
-              "Resource": "*",
-            },
             Object {
               "Action": Array [
                 "logs:CreateLogStream",
@@ -869,132 +658,6 @@ Object {
       "UpdateReplacePolicy": "Retain",
     },
     "apisixdemoTaskApiSixetcdLogGroup6FBE17E5": Object {
-      "DeletionPolicy": "Retain",
-      "Properties": Object {
-        "RetentionInDays": 1,
-      },
-      "Type": "AWS::Logs::LogGroup",
-      "UpdateReplacePolicy": "Retain",
-    },
-    "apisixdemoTaskFlask71E37A1D": Object {
-      "Properties": Object {
-        "ContainerDefinitions": Array [
-          Object {
-            "Environment": Array [
-              Object {
-                "Name": "PLATFORM",
-                "Value": "Apache APISIX on AWS Fargate with AWS CDK",
-              },
-            ],
-            "Essential": true,
-            "Image": "public.ecr.aws/d7p2r8s3/flask-docker-sample",
-            "LogConfiguration": Object {
-              "LogDriver": "awslogs",
-              "Options": Object {
-                "awslogs-group": Object {
-                  "Ref": "apisixdemoTaskFlaskflaskLogGroup50F000C2",
-                },
-                "awslogs-region": Object {
-                  "Ref": "AWS::Region",
-                },
-                "awslogs-stream-prefix": "flask",
-              },
-            },
-            "Name": "flask",
-            "PortMappings": Array [
-              Object {
-                "ContainerPort": 80,
-                "Protocol": "tcp",
-              },
-            ],
-          },
-        ],
-        "Cpu": "256",
-        "ExecutionRoleArn": Object {
-          "Fn::GetAtt": Array [
-            "apisixdemoTaskFlaskExecutionRole1A9E0C52",
-            "Arn",
-          ],
-        },
-        "Family": "ApiSixDemoStackapisixdemoTaskFlask9C8DE8AA",
-        "Memory": "512",
-        "NetworkMode": "awsvpc",
-        "RequiresCompatibilities": Array [
-          "FARGATE",
-        ],
-        "TaskRoleArn": Object {
-          "Fn::GetAtt": Array [
-            "apisixdemoTaskFlaskTaskRole95E53CE1",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::ECS::TaskDefinition",
-    },
-    "apisixdemoTaskFlaskExecutionRole1A9E0C52": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "ecs-tasks.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "apisixdemoTaskFlaskExecutionRoleDefaultPolicyA1AADC1B": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "apisixdemoTaskFlaskflaskLogGroup50F000C2",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "apisixdemoTaskFlaskExecutionRoleDefaultPolicyA1AADC1B",
-        "Roles": Array [
-          Object {
-            "Ref": "apisixdemoTaskFlaskExecutionRole1A9E0C52",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "apisixdemoTaskFlaskTaskRole95E53CE1": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "ecs-tasks.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "apisixdemoTaskFlaskflaskLogGroup50F000C2": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "RetentionInDays": 1,
@@ -1446,6 +1109,274 @@ Object {
         "ToPort": 2049,
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "apisixdemoserviceflaskLBFE4E88D0": Object {
+      "DependsOn": Array [
+        "apisixdemoVpcPublicSubnet1DefaultRoute85B3E562",
+        "apisixdemoVpcPublicSubnet2DefaultRoute746A97C7",
+      ],
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+          Object {
+            "Key": "load_balancing.cross_zone.enabled",
+            "Value": "true",
+          },
+        ],
+        "Scheme": "internet-facing",
+        "Subnets": Array [
+          Object {
+            "Ref": "apisixdemoVpcPublicSubnet1Subnet2EB6ADD3",
+          },
+          Object {
+            "Ref": "apisixdemoVpcPublicSubnet2SubnetB18C7139",
+          },
+        ],
+        "Type": "network",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "apisixdemoserviceflaskLBPublicListenerECSGroup00886760": Object {
+      "Properties": Object {
+        "Port": 80,
+        "Protocol": "TCP",
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "30",
+          },
+        ],
+        "TargetType": "ip",
+        "VpcId": Object {
+          "Ref": "apisixdemoVpc276C38A9",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "apisixdemoserviceflaskLBPublicListenerF4D18A18": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "apisixdemoserviceflaskLBPublicListenerECSGroup00886760",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "apisixdemoserviceflaskLBFE4E88D0",
+        },
+        "Port": 80,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "apisixdemoserviceflaskService2516A43F": Object {
+      "DependsOn": Array [
+        "apisixdemoserviceflaskLBPublicListenerECSGroup00886760",
+        "apisixdemoserviceflaskLBPublicListenerF4D18A18",
+      ],
+      "Properties": Object {
+        "Cluster": Object {
+          "Ref": "apisixdemoClusterFA832B41",
+        },
+        "DeploymentConfiguration": Object {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": Array [
+          Object {
+            "ContainerName": "containerflask",
+            "ContainerPort": 80,
+            "TargetGroupArn": Object {
+              "Ref": "apisixdemoserviceflaskLBPublicListenerECSGroup00886760",
+            },
+          },
+        ],
+        "NetworkConfiguration": Object {
+          "AwsvpcConfiguration": Object {
+            "AssignPublicIp": "ENABLED",
+            "SecurityGroups": Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "apisixdemoserviceflaskServiceSecurityGroup4755CE4E",
+                  "GroupId",
+                ],
+              },
+            ],
+            "Subnets": Array [
+              Object {
+                "Ref": "apisixdemoVpcPublicSubnet1Subnet2EB6ADD3",
+              },
+              Object {
+                "Ref": "apisixdemoVpcPublicSubnet2SubnetB18C7139",
+              },
+            ],
+          },
+        },
+        "TaskDefinition": Object {
+          "Ref": "apisixdemotaskflaskBE7ABE4C",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "apisixdemoserviceflaskServiceSecurityGroup4755CE4E": Object {
+      "Properties": Object {
+        "GroupDescription": "ApiSixDemoStack/apisix-demo/serviceflask/Service/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "apisixdemoVpc276C38A9",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "apisixdemotaskflaskBE7ABE4C": Object {
+      "Properties": Object {
+        "ContainerDefinitions": Array [
+          Object {
+            "Environment": Array [
+              Object {
+                "Name": "PLATFORM",
+                "Value": "Apache APISIX on AWS Fargate",
+              },
+            ],
+            "Essential": true,
+            "Image": "public.ecr.aws/d7p2r8s3/flask-docker-sample",
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "apisixdemotaskflaskcontainerflaskLogGroup08333CF3",
+                },
+                "awslogs-region": Object {
+                  "Ref": "AWS::Region",
+                },
+                "awslogs-stream-prefix": "flask",
+              },
+            },
+            "Name": "containerflask",
+            "PortMappings": Array [
+              Object {
+                "ContainerPort": 80,
+                "Protocol": "tcp",
+              },
+            ],
+          },
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "apisixdemotaskflaskExecutionRole9F888C74",
+            "Arn",
+          ],
+        },
+        "Family": "ApiSixDemoStackapisixdemotaskflask59D2A053",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": Array [
+          "FARGATE",
+        ],
+        "TaskRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "apisixdemotaskflaskTaskRole4D258272",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "apisixdemotaskflaskExecutionRole9F888C74": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "apisixdemotaskflaskExecutionRoleDefaultPolicyC106EB93": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "apisixdemotaskflaskcontainerflaskLogGroup08333CF3",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "apisixdemotaskflaskExecutionRoleDefaultPolicyC106EB93",
+        "Roles": Array [
+          Object {
+            "Ref": "apisixdemotaskflaskExecutionRole9F888C74",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "apisixdemotaskflaskTaskRole4D258272": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "apisixdemotaskflaskcontainerflaskLogGroup08333CF3": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "RetentionInDays": 1,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
     },
   },
 }

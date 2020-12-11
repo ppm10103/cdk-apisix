@@ -12,9 +12,23 @@ CDK construct library to generate serverless [Apache APISIX](https://github.com/
 ```ts
 import { Apisix } from 'cdk-apisix';
 
+// create a standard apisix service
+const apisix = new Apisix(stack, 'apisix-demo')
+
+// create a sample webservice with apisix in the same Amazon ECS cluster
+apisix.createWebService('flask', {
+  environment: {
+    PLATFORM: 'Apache APISIX on AWS Fargate'
+  },
+  image: ContainerImage.fromRegistry('public.ecr.aws/d7p2r8s3/flask-docker-sample'),
+} )
+```
+
+## custom container image from local assets
+
+```ts
 new Apisix(stack, 'apisix-demo', {
   apisixContainer: ContainerImage.fromAsset(path.join(__dirname, '../apisix_container')),
-  etcdContainer: ContainerImage.fromRegistry('public.ecr.aws/eks-distro/etcd-io/etcd:v3.4.14-eks-1-18-1'),
   dashboardContainer: ContainerImage.fromAsset(path.join(__dirname, '../apisix_dashboard')),
 });
 ```

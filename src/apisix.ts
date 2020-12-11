@@ -7,27 +7,73 @@ import * as iam from '@aws-cdk/aws-iam';
 import * as log from '@aws-cdk/aws-logs';
 import * as cdk from '@aws-cdk/core';
 
+const DEFAULTS = {
+  apisixContainer: 'public.ecr.aws/d7p2r8s3/apisix',
+  etcdContainer: 'public.ecr.aws/eks-distro/etcd-io/etcd:v3.4.14-eks-1-18-1',
+  dashboardContainer: 'public.ecr.aws/d7p2r8s3/apisix-dashboard',
+};
+
+/**
+ * construct properties for Apisix
+ */
 export interface ApisixProps {
+  /**
+   * Vpc for the APISIX
+   * @default - create a new VPC or use existing one
+   */
   readonly vpc?: IVpc;
+  /**
+   * Amazon ECS cluster
+   * @default - create a new cluster
+   */
   readonly cluster?: ecs.ICluster;
+  /**
+   * Amazon EFS filesystem for etcd data persistence
+   * @default - ceate a new filesystem
+   */
   readonly efsFilesystem?: efs.IFileSystem;
-  readonly apisixContainer: ecs.ContainerImage;
-  readonly dashboardContainer: ecs.ContainerImage;
-  readonly etcdContainer: ecs.ContainerImage;
+  /**
+   * container for APISIX API service
+   * @default - public.ecr.aws/d7p2r8s3/apisix
+   */
+  readonly apisixContainer?: ecs.ContainerImage;
+  /**
+   * container for the dashboard
+   * @default - public.ecr.aws/d7p2r8s3/apisix-dashboard
+   */
+  readonly dashboardContainer?: ecs.ContainerImage;
+  /**
+   * container for the etcd
+   * @default - public.ecr.aws/eks-distro/etcd-io/etcd:v3.4.14-eks-1-18-1
+   */
+  readonly etcdContainer?: ecs.ContainerImage;
 }
 
+/**
+ * options for createWebService
+ */
+export interface WebServiceOptions {
+  readonly image?: ecs.RepositoryImage;
+  readonly port?: number;
+  readonly environment?: {
+    [key: string]: string;
+  };
+}
+
+/**
+ * The Apisix construct
+ */
 export class Apisix extends cdk.Construct {
   readonly vpc: IVpc;
-  constructor(scope: cdk.Construct, id: string, props: ApisixProps) {
+  readonly cluster: ecs.ICluster;
+  constructor(scope: cdk.Construct, id: string, props: ApisixProps = {}) {
     super(scope, id);
 
     const stack = cdk.Stack.of(this);
-
     const vpc = props.vpc ?? getOrCreateVpc(this);
-
     this.vpc = vpc;
-
     const cluster = props.cluster ?? new ecs.Cluster(this, 'Cluster', { vpc });
+    this.cluster = cluster;
 
     /**
      * Amazon EFS filesystem for etcd
@@ -44,7 +90,7 @@ export class Apisix extends cdk.Construct {
 
     const apisix = taskDefinition
       .addContainer('apisix', {
-        image: props.apisixContainer,
+        image: props.apisixContainer ?? ecs.ContainerImage.fromRegistry(DEFAULTS.apisixContainer),
         logging: new ecs.AwsLogDriver({
           streamPrefix: 'apisix',
           logRetention: log.RetentionDays.ONE_DAY,
@@ -79,7 +125,7 @@ export class Apisix extends cdk.Construct {
 
     const etcdContainer = taskDefinition
       .addContainer('etcd', {
-        image: props.etcdContainer,
+        image: props.etcdContainer ?? ecs.ContainerImage.fromRegistry(DEFAULTS.etcdContainer),
         environment: {
           ETCD_DATA_DIR: '/etcd_data',
           ETCD_ENABLE_V2: 'true',
@@ -109,7 +155,7 @@ export class Apisix extends cdk.Construct {
 
     // add dashboard container
     const dashboard = taskDefinition.addContainer('dashboard', {
-      image: props.dashboardContainer,
+      image: props.dashboardContainer ?? ecs.ContainerImage.fromRegistry(DEFAULTS.dashboardContainer),
       logging: new ecs.AwsLogDriver({
         streamPrefix: 'dashboard',
         logRetention: log.RetentionDays.ONE_DAY,
@@ -182,40 +228,6 @@ export class Apisix extends cdk.Construct {
     apisixService.connections.allowFrom(fs, Port.tcp(2049));
     apisixService.connections.allowTo(fs, Port.tcp(2049));
 
-    /**
-     * Flask service
-     */
-    const flaskTask = new ecs.FargateTaskDefinition(this, 'TaskFlask', {
-      cpu: 256,
-      memoryLimitMiB: 512,
-    });
-
-    flaskTask
-      .addContainer('flask', {
-        image: ecs.ContainerImage.fromRegistry('public.ecr.aws/d7p2r8s3/flask-docker-sample'),
-        environment: {
-          PLATFORM: 'Apache APISIX on AWS Fargate with AWS CDK',
-        },
-        logging: new ecs.AwsLogDriver({
-          streamPrefix: 'flask',
-          logRetention: log.RetentionDays.ONE_DAY,
-        }),
-      })
-      .addPortMappings({
-        containerPort: 80,
-      });
-
-    const svcFlask = new NetworkLoadBalancedFargateService(this, 'FlaskService', {
-      cluster,
-      taskDefinition: flaskTask,
-      assignPublicIp: true,
-    });
-
-    // allow Fargate task behind NLB to accept all traffic
-    svcFlask.service.connections.allowFromAnyIpv4(Port.tcp(80));
-    svcFlask.targetGroup.setAttribute('deregistration_delay.timeout_seconds', '30');
-    svcFlask.loadBalancer.setAttribute('load_balancing.cross_zone.enabled', 'true');
-
     new cdk.CfnOutput(this, 'ApiSixURL', {
       value: `http://${alb.loadBalancerDnsName}`,
     });
@@ -225,6 +237,44 @@ export class Apisix extends cdk.Construct {
       vpc: this.vpc,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
+  }
+
+  /**
+   * Create a basic web service on AWS Fargate
+   */
+  public createWebService(id: string, options: WebServiceOptions ): NetworkLoadBalancedFargateService {
+    // flask service
+    const DEFAULT_SERVICE_IMAGE = 'public.ecr.aws/d7p2r8s3/flask-docker-sample';
+
+    const task = new ecs.FargateTaskDefinition(this, `task${id}`, {
+      cpu: 256,
+      memoryLimitMiB: 512,
+    });
+
+    task
+      .addContainer(`container${id}`, {
+        image: options.image ?? ecs.ContainerImage.fromRegistry(DEFAULT_SERVICE_IMAGE),
+        environment: options.environment,
+        logging: new ecs.AwsLogDriver({
+          streamPrefix: id,
+          logRetention: log.RetentionDays.ONE_DAY,
+        }),
+      })
+      .addPortMappings({
+        containerPort: options.port ?? 80,
+      });
+
+    const service = new NetworkLoadBalancedFargateService(this, `service${id}`, {
+      cluster: this.cluster,
+      taskDefinition: task,
+      assignPublicIp: true,
+    });
+
+    // allow Fargate task behind NLB to accept all traffic
+    service.service.connections.allowFromAnyIpv4(Port.tcp(80));
+    service.targetGroup.setAttribute('deregistration_delay.timeout_seconds', '30');
+    service.loadBalancer.setAttribute('load_balancing.cross_zone.enabled', 'true');
+    return service;
   }
 }
 

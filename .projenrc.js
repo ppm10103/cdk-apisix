@@ -5,7 +5,7 @@ const AUTOMATION_TOKEN = 'AUTOMATION_GITHUB_TOKEN';
 const project = new AwsCdkConstructLibrary({
   authorAddress: 'pahudnet@gmail.com',
   authorName: 'Pahud',
-  cdkVersion: '1.77.0',
+  cdkVersion: '1.82.0',
   name: 'cdk-apisix',
   repository: 'https://github.com/pahud/cdk-apisix.git',
   releaseBranches: ['main'],

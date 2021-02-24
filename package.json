@@ -1,5 +1,6 @@
 {
   "name": "cdk-apisix",
+  "description": "CDK construct library to generate serverless Apache APISIX workload on AWS Fargate.",
   "repository": {
     "type": "git",
     "url": "https://github.com/pahud/cdk-apisix.git"
@@ -30,25 +31,25 @@
   },
   "devDependencies": {
     "@aws-cdk/assert": "^1.82.0",
-    "@types/jest": "^26.0.18",
+    "@types/jest": "^26.0.20",
     "@types/node": "^10.17.0",
-    "@typescript-eslint/eslint-plugin": "^4.3.0",
-    "@typescript-eslint/parser": "^4.3.0",
-    "eslint": "^7.15.0",
+    "@typescript-eslint/eslint-plugin": "^4.15.2",
+    "@typescript-eslint/parser": "^4.15.2",
+    "eslint": "^7.20.0",
     "eslint-import-resolver-node": "^0.3.4",
-    "eslint-import-resolver-typescript": "^2.3.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.22.1",
     "jest": "^26.6.3",
     "jest-junit": "^12",
-    "jsii": "^1.16.0",
-    "jsii-diff": "^1.16.0",
-    "jsii-docgen": "^1.4.114",
-    "jsii-pacmak": "^1.16.0",
-    "json-schema": "^0.2.5",
+    "jsii": "^1.22.0",
+    "jsii-diff": "^1.22.0",
+    "jsii-docgen": "^1.8.51",
+    "jsii-pacmak": "^1.22.0",
+    "json-schema": "^0.3.0",
     "projen": "^0.16.12",
     "standard-version": "^9",
-    "ts-jest": "^26.4.4",
-    "typescript": "^3.9.5"
+    "ts-jest": "^26.5.2",
+    "typescript": "^4.2.2"
   },
   "peerDependencies": {
     "@aws-cdk/aws-ec2": "^1.82.0",

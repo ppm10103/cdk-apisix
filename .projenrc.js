@@ -8,6 +8,7 @@ const project = new AwsCdkConstructLibrary({
   authorName: 'Pahud',
   cdkVersion: '1.82.0',
   name: 'cdk-apisix',
+  description: 'CDK construct library to generate serverless Apache APISIX workload on AWS Fargate.',
   repository: 'https://github.com/pahud/cdk-apisix.git',
   releaseBranches: ['main'],
   defaultReleaseBranch: 'main',

@@ -45,7 +45,7 @@
     "jsii-docgen": "^1.4.114",
     "jsii-pacmak": "^1.16.0",
     "json-schema": "^0.2.5",
-    "projen": "^0.16.11",
+    "projen": "^0.16.12",
     "standard-version": "^9",
     "ts-jest": "^26.4.4",
     "typescript": "^3.9.5"
@@ -69,9 +69,12 @@
     "@aws-cdk/aws-elasticloadbalancingv2": "^1.82.0",
     "@aws-cdk/aws-iam": "^1.82.0",
     "@aws-cdk/aws-logs": "^1.82.0",
-    "@aws-cdk/core": "^1.82.0"
+    "@aws-cdk/core": "^1.82.0",
+    "projen-automate-it": "^0.0.4"
   },
-  "bundledDependencies": [],
+  "bundledDependencies": [
+    "projen-automate-it"
+  ],
   "keywords": [
     "cdk"
   ],

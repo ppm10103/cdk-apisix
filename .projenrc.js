@@ -1,7 +1,7 @@
 const { AwsCdkConstructLibrary } = require('projen');
 const { Automation } = require('projen-automate-it');
 
-const AUTOMATION_TOKEN = 'AUTOMATION_GITHUB_TOKEN';
+const AUTOMATION_TOKEN = 'PROJEN_GITHUB_TOKEN';
 
 const project = new AwsCdkConstructLibrary({
   authorAddress: 'pahudnet@gmail.com',

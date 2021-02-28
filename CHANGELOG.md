@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.61](https://github.com/pahud/cdk-apisix/compare/v0.0.60...v0.0.61) (2021-02-28)
+
 ### [0.0.60](https://github.com/pahud/cdk-apisix/compare/v0.0.59...v0.0.60) (2021-02-27)
 
 ### [0.0.59](https://github.com/pahud/cdk-apisix/compare/v0.0.58...v0.0.59) (2021-02-26)

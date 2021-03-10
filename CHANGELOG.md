@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.71](https://github.com/pahud/cdk-apisix/compare/v0.0.70...v0.0.71) (2021-03-10)
+
+
+### Features
+
+* support dynamic credentials ([#71](https://github.com/pahud/cdk-apisix/issues/71)) ([554b6d3](https://github.com/pahud/cdk-apisix/commit/554b6d302e8e1b31a4eb5e4122cb3ebf732481ef))
+
 ### [0.0.70](https://github.com/pahud/cdk-apisix/compare/v0.0.69...v0.0.70) (2021-03-09)
 
 ### [0.0.69](https://github.com/pahud/cdk-apisix/compare/v0.0.68...v0.0.69) (2021-03-08)

@@ -22,9 +22,19 @@ apisix.createWebService('flask', {
   environment: {
     PLATFORM: 'Apache APISIX on AWS Fargate'
   },
-  image: ContainerImage.fromRegistry('public.ecr.aws/d7p2r8s3/flask-docker-sample'),
+  image: ContainerImage.fromRegistry('public.ecr.aws/pahudnet/flask-docker-sample'),
 } )
 ```
+## deploy with required context variables
+
+```sh
+cdk deploy \
+-c ADMIN_KEY_ADMIN=*********** \
+-c ADMIN_KEY_VIEWER=*********** \
+-c DASHBOARD_ADMIN_PASSWORD=*********** \
+-c DASHBOARD_USER_PASSWORD=***********
+```
+
 
 ## custom container image from local assets
 

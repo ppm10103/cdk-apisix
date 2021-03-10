@@ -8,9 +8,9 @@ import * as log from '@aws-cdk/aws-logs';
 import * as cdk from '@aws-cdk/core';
 
 const DEFAULTS = {
-  apisixContainer: 'public.ecr.aws/d7p2r8s3/apisix',
-  etcdContainer: 'public.ecr.aws/eks-distro/etcd-io/etcd:v3.4.14-eks-1-18-1',
-  dashboardContainer: 'public.ecr.aws/d7p2r8s3/apisix-dashboard:v2.1.1',
+  apisixContainer: 'public.ecr.aws/pahudnet/apisix-docker:v2.4',
+  etcdContainer: 'public.ecr.aws/eks-distro/etcd-io/etcd:v3.4.14-eks-1-19-1',
+  dashboardContainer: 'public.ecr.aws/pahudnet/apisix-dashboard:v2.4',
 };
 
 /**
@@ -66,6 +66,7 @@ export interface WebServiceOptions {
 export class Apisix extends cdk.Construct {
   readonly vpc: IVpc;
   readonly cluster: ecs.ICluster;
+  readonly envVar: { [key:string]: string};
   constructor(scope: cdk.Construct, id: string, props: ApisixProps = {}) {
     super(scope, id);
 
@@ -74,6 +75,25 @@ export class Apisix extends cdk.Construct {
     this.vpc = vpc;
     const cluster = props.cluster ?? new ecs.Cluster(this, 'Cluster', { vpc });
     this.cluster = cluster;
+
+    const requiredContextVariables = [
+      'ADMIN_KEY_ADMIN',
+      'ADMIN_KEY_VIEWER',
+      'DASHBOARD_ADMIN_PASSWORD',
+      'DASHBOARD_USER_PASSWORD',
+    ];
+
+    requiredContextVariables.map(v => throwIfNotAvailable(this, v));
+
+    throwIfNotAvailable(this, 'ADMIN_KEY_ADMIN');
+    this.envVar = {
+      ADMIN_KEY_ADMIN: stack.node.tryGetContext('ADMIN_KEY_ADMIN'),
+      ADMIN_KEY_VIEWER: stack.node.tryGetContext('ADMIN_KEY_VIEWER'),
+      ETCD_HOST: stack.node.tryGetContext('ETCD_HOST') || '0.0.0.0',
+      ETCD_PORT: stack.node.tryGetContext('ETCD_PORT') || '2379',
+      DASHBOARD_ADMIN_PASSWORD: stack.node.tryGetContext('DASHBOARD_ADMIN_PASSWORD'),
+      DASHBOARD_USER_PASSWORD: stack.node.tryGetContext('DASHBOARD_USER_PASSWORD'),
+    };
 
     /**
      * Amazon EFS filesystem for etcd
@@ -95,11 +115,12 @@ export class Apisix extends cdk.Construct {
           streamPrefix: 'apisix',
           logRetention: log.RetentionDays.ONE_DAY,
         }),
+        environment: {
+          ADMIN_KEY_ADMIN: this.envVar.ADMIN_KEY_ADMIN,
+          ADMIN_KEY_VIEWER: this.envVar.ADMIN_KEY_VIEWER,
+        },
+        portMappings: [{ containerPort: 9080 }],
       });
-
-    apisix.addPortMappings({
-      containerPort: 9080,
-    });
 
     taskDefinition.addVolume({
       name: 'etcd-data',
@@ -160,6 +181,12 @@ export class Apisix extends cdk.Construct {
         streamPrefix: 'dashboard',
         logRetention: log.RetentionDays.ONE_DAY,
       }),
+      environment: {
+        ETCD_HOST: this.envVar.ETCD_HOST,
+        ETCD_PORT: this.envVar.ETCD_PORT,
+        ADMIN_PASSWORD: this.envVar.DASHBOARD_ADMIN_PASSWORD,
+        USER_PASSWORD: this.envVar.DASHBOARD_USER_PASSWORD,
+      },
     });
     dashboard.addPortMappings({
       containerPort: 9000,
@@ -244,7 +271,7 @@ export class Apisix extends cdk.Construct {
    */
   public createWebService(id: string, options: WebServiceOptions ): NetworkLoadBalancedFargateService {
     // flask service
-    const DEFAULT_SERVICE_IMAGE = 'public.ecr.aws/d7p2r8s3/flask-docker-sample';
+    const DEFAULT_SERVICE_IMAGE = 'public.ecr.aws/pahudnet/flask-docker-sample';
 
     const task = new ecs.FargateTaskDefinition(this, `task${id}`, {
       cpu: 256,
@@ -285,4 +312,17 @@ function getOrCreateVpc(scope: cdk.Construct): IVpc {
     scope.node.tryGetContext('use_vpc_id') ?
       Vpc.fromLookup(scope, 'Vpc', { vpcId: scope.node.tryGetContext('use_vpc_id') }) :
       new Vpc(scope, 'Vpc', { maxAzs: 3, natGateways: 1 });
+}
+
+function isContextAvailable(scope: cdk.Construct, key: string) {
+  return cdk.Stack.of(scope).node.tryGetContext(key);
+}
+
+/**
+ * Throws if the context is not available
+ */
+function throwIfNotAvailable(scope: cdk.Construct, key: string) {
+  if (!isContextAvailable(scope, key)) {
+    throw new Error(`${key} is required in the context variable`);
+  }
 }

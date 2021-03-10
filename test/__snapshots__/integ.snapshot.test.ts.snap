@@ -64,7 +64,7 @@ Object {
     },
     "apisixdemoALBSecurityGroupF176CD54": Object {
       "Properties": Object {
-        "GroupDescription": "Automatically created Security Group for ELB ApiSixDemoStack2apisixdemoALBB5857770",
+        "GroupDescription": "Automatically created Security Group for ELB ApiSixDemoStackapisixdemoALB05A5332E",
         "SecurityGroupIngress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -87,7 +87,7 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "apisixdemoALBSecurityGrouptoApiSixDemoStack2apisixdemoAPISIXServiceSecurityGroupEA9300409000DDA00594": Object {
+    "apisixdemoALBSecurityGrouptoApiSixDemoStackapisixdemoAPISIXServiceSecurityGroup9442563790002C4E2202": Object {
       "Properties": Object {
         "Description": "Load balancer to target",
         "DestinationSecurityGroupId": Object {
@@ -108,7 +108,7 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
-    "apisixdemoALBSecurityGrouptoApiSixDemoStack2apisixdemoAPISIXServiceSecurityGroupEA93004090804392D9EC": Object {
+    "apisixdemoALBSecurityGrouptoApiSixDemoStackapisixdemoAPISIXServiceSecurityGroup944256379080D76FFF8A": Object {
       "Properties": Object {
         "Description": "Load balancer to target",
         "DestinationSecurityGroupId": Object {
@@ -129,9 +129,9 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
-    "apisixdemoALBSecurityGrouptoApiSixDemoStack2apisixdemoAPISIXServiceSecurityGroupEA930040ALLTRAFFIC80D6B946": Object {
+    "apisixdemoALBSecurityGrouptoApiSixDemoStackapisixdemoAPISIXServiceSecurityGroup94425637ALLTRAFFIC60356F90": Object {
       "Properties": Object {
-        "Description": "to ApiSixDemoStack2apisixdemoAPISIXServiceSecurityGroupEA930040:ALL TRAFFIC",
+        "Description": "to ApiSixDemoStackapisixdemoAPISIXServiceSecurityGroup94425637:ALL TRAFFIC",
         "DestinationSecurityGroupId": Object {
           "Fn::GetAtt": Array [
             "apisixdemoAPISIXServiceSecurityGroupA7B9DD01",
@@ -244,7 +244,7 @@ Object {
     },
     "apisixdemoAPISIXServiceSecurityGroupA7B9DD01": Object {
       "Properties": Object {
-        "GroupDescription": "ApiSixDemoStack2/apisix-demo/APISIXService/SecurityGroup",
+        "GroupDescription": "ApiSixDemoStack/apisix-demo/APISIXService/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -258,7 +258,7 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "apisixdemoAPISIXServiceSecurityGroupfromApiSixDemoStack2apisixdemoALBSecurityGroupF4A7500B9000A4CE8D3F": Object {
+    "apisixdemoAPISIXServiceSecurityGroupfromApiSixDemoStackapisixdemoALBSecurityGroup86655C549000261C2E46": Object {
       "Properties": Object {
         "Description": "Load balancer to target",
         "FromPort": 9000,
@@ -279,7 +279,7 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
     },
-    "apisixdemoAPISIXServiceSecurityGroupfromApiSixDemoStack2apisixdemoALBSecurityGroupF4A7500B9080F11691B3": Object {
+    "apisixdemoAPISIXServiceSecurityGroupfromApiSixDemoStackapisixdemoALBSecurityGroup86655C5490806C8BFAE7": Object {
       "Properties": Object {
         "Description": "Load balancer to target",
         "FromPort": 9080,
@@ -300,9 +300,9 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
     },
-    "apisixdemoAPISIXServiceSecurityGroupfromApiSixDemoStack2apisixdemoALBSecurityGroupF4A7500BALLTRAFFICB1A762DF": Object {
+    "apisixdemoAPISIXServiceSecurityGroupfromApiSixDemoStackapisixdemoALBSecurityGroup86655C54ALLTRAFFIC9F8188C4": Object {
       "Properties": Object {
-        "Description": "from ApiSixDemoStack2apisixdemoALBSecurityGroupF4A7500B:ALL TRAFFIC",
+        "Description": "from ApiSixDemoStackapisixdemoALBSecurityGroup86655C54:ALL TRAFFIC",
         "GroupId": Object {
           "Fn::GetAtt": Array [
             "apisixdemoAPISIXServiceSecurityGroupA7B9DD01",
@@ -319,9 +319,9 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
     },
-    "apisixdemoAPISIXServiceSecurityGroupfromApiSixDemoStack2apisixdemofilesystemEfsSecurityGroup17DE373A2049F4BAB92A": Object {
+    "apisixdemoAPISIXServiceSecurityGroupfromApiSixDemoStackapisixdemofilesystemEfsSecurityGroupF69883872049F48896C4": Object {
       "Properties": Object {
-        "Description": "from ApiSixDemoStack2apisixdemofilesystemEfsSecurityGroup17DE373A:2049",
+        "Description": "from ApiSixDemoStackapisixdemofilesystemEfsSecurityGroupF6988387:2049",
         "FromPort": 2049,
         "GroupId": Object {
           "Fn::GetAtt": Array [
@@ -385,8 +385,18 @@ Object {
                 "ContainerName": "etcd",
               },
             ],
+            "Environment": Array [
+              Object {
+                "Name": "ADMIN_KEY_ADMIN",
+                "Value": "mock",
+              },
+              Object {
+                "Name": "ADMIN_KEY_VIEWER",
+                "Value": "mock",
+              },
+            ],
             "Essential": true,
-            "Image": "public.ecr.aws/d7p2r8s3/apisix",
+            "Image": "public.ecr.aws/pahudnet/apisix-docker:v2.4",
             "LogConfiguration": Object {
               "LogDriver": "awslogs",
               "Options": Object {
@@ -431,7 +441,7 @@ Object {
               },
             ],
             "Essential": true,
-            "Image": "public.ecr.aws/eks-distro/etcd-io/etcd:v3.4.14-eks-1-18-1",
+            "Image": "public.ecr.aws/eks-distro/etcd-io/etcd:v3.4.14-eks-1-19-1",
             "LogConfiguration": Object {
               "LogDriver": "awslogs",
               "Options": Object {
@@ -466,8 +476,26 @@ Object {
                 "ContainerName": "etcd",
               },
             ],
+            "Environment": Array [
+              Object {
+                "Name": "ETCD_HOST",
+                "Value": "0.0.0.0",
+              },
+              Object {
+                "Name": "ETCD_PORT",
+                "Value": "2379",
+              },
+              Object {
+                "Name": "ADMIN_PASSWORD",
+                "Value": "mock",
+              },
+              Object {
+                "Name": "USER_PASSWORD",
+                "Value": "mock",
+              },
+            ],
             "Essential": true,
-            "Image": "public.ecr.aws/d7p2r8s3/apisix-dashboard:v2.1.1",
+            "Image": "public.ecr.aws/pahudnet/apisix-dashboard:v2.4",
             "LogConfiguration": Object {
               "LogDriver": "awslogs",
               "Options": Object {
@@ -496,7 +524,7 @@ Object {
             "Arn",
           ],
         },
-        "Family": "ApiSixDemoStack2apisixdemoTaskApiSix1F2F9F59",
+        "Family": "ApiSixDemoStackapisixdemoTaskApiSix038A3F61",
         "Memory": "512",
         "NetworkMode": "awsvpc",
         "RequiresCompatibilities": Array [
@@ -673,7 +701,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/Vpc",
+            "Value": "ApiSixDemoStack/apisix-demo/Vpc",
           },
         ],
       },
@@ -684,7 +712,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/Vpc",
+            "Value": "ApiSixDemoStack/apisix-demo/Vpc",
           },
         ],
       },
@@ -707,7 +735,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/Vpc/PrivateSubnet1",
+            "Value": "ApiSixDemoStack/apisix-demo/Vpc/PrivateSubnet1",
           },
         ],
         "VpcId": Object {
@@ -750,7 +778,7 @@ Object {
           },
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/Vpc/PrivateSubnet1",
+            "Value": "ApiSixDemoStack/apisix-demo/Vpc/PrivateSubnet1",
           },
         ],
         "VpcId": Object {
@@ -787,7 +815,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/Vpc/PrivateSubnet2",
+            "Value": "ApiSixDemoStack/apisix-demo/Vpc/PrivateSubnet2",
           },
         ],
         "VpcId": Object {
@@ -819,7 +847,7 @@ Object {
           },
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/Vpc/PrivateSubnet2",
+            "Value": "ApiSixDemoStack/apisix-demo/Vpc/PrivateSubnet2",
           },
         ],
         "VpcId": Object {
@@ -849,7 +877,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/Vpc/PublicSubnet1",
+            "Value": "ApiSixDemoStack/apisix-demo/Vpc/PublicSubnet1",
           },
         ],
       },
@@ -869,7 +897,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/Vpc/PublicSubnet1",
+            "Value": "ApiSixDemoStack/apisix-demo/Vpc/PublicSubnet1",
           },
         ],
       },
@@ -880,7 +908,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/Vpc/PublicSubnet1",
+            "Value": "ApiSixDemoStack/apisix-demo/Vpc/PublicSubnet1",
           },
         ],
         "VpcId": Object {
@@ -923,7 +951,7 @@ Object {
           },
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/Vpc/PublicSubnet1",
+            "Value": "ApiSixDemoStack/apisix-demo/Vpc/PublicSubnet1",
           },
         ],
         "VpcId": Object {
@@ -952,7 +980,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/Vpc/PublicSubnet2",
+            "Value": "ApiSixDemoStack/apisix-demo/Vpc/PublicSubnet2",
           },
         ],
         "VpcId": Object {
@@ -995,7 +1023,7 @@ Object {
           },
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/Vpc/PublicSubnet2",
+            "Value": "ApiSixDemoStack/apisix-demo/Vpc/PublicSubnet2",
           },
         ],
         "VpcId": Object {
@@ -1021,7 +1049,7 @@ Object {
         "FileSystemTags": Array [
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/filesystem",
+            "Value": "ApiSixDemoStack/apisix-demo/filesystem",
           },
         ],
       },
@@ -1068,7 +1096,7 @@ Object {
     },
     "apisixdemofilesystemEfsSecurityGroupC731E19F": Object {
       "Properties": Object {
-        "GroupDescription": "ApiSixDemoStack2/apisix-demo/filesystem/EfsSecurityGroup",
+        "GroupDescription": "ApiSixDemoStack/apisix-demo/filesystem/EfsSecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1079,7 +1107,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "ApiSixDemoStack2/apisix-demo/filesystem",
+            "Value": "ApiSixDemoStack/apisix-demo/filesystem",
           },
         ],
         "VpcId": Object {
@@ -1088,9 +1116,9 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "apisixdemofilesystemEfsSecurityGroupfromApiSixDemoStack2apisixdemoAPISIXServiceSecurityGroupEA9300402049E0C44B14": Object {
+    "apisixdemofilesystemEfsSecurityGroupfromApiSixDemoStackapisixdemoAPISIXServiceSecurityGroup9442563720492A44F81D": Object {
       "Properties": Object {
-        "Description": "from ApiSixDemoStack2apisixdemoAPISIXServiceSecurityGroupEA930040:2049",
+        "Description": "from ApiSixDemoStackapisixdemoAPISIXServiceSecurityGroup94425637:2049",
         "FromPort": 2049,
         "GroupId": Object {
           "Fn::GetAtt": Array [
@@ -1228,7 +1256,7 @@ Object {
     },
     "apisixdemoserviceflaskServiceSecurityGroup4755CE4E": Object {
       "Properties": Object {
-        "GroupDescription": "ApiSixDemoStack2/apisix-demo/serviceflask/Service/SecurityGroup",
+        "GroupDescription": "ApiSixDemoStack/apisix-demo/serviceflask/Service/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1262,7 +1290,7 @@ Object {
               },
             ],
             "Essential": true,
-            "Image": "public.ecr.aws/d7p2r8s3/flask-docker-sample",
+            "Image": "public.ecr.aws/pahudnet/flask-docker-sample",
             "LogConfiguration": Object {
               "LogDriver": "awslogs",
               "Options": Object {
@@ -1291,7 +1319,7 @@ Object {
             "Arn",
           ],
         },
-        "Family": "ApiSixDemoStack2apisixdemotaskflask0F1ABE9E",
+        "Family": "ApiSixDemoStackapisixdemotaskflask59D2A053",
         "Memory": "512",
         "NetworkMode": "awsvpc",
         "RequiresCompatibilities": Array [

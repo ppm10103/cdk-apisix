@@ -50,6 +50,7 @@ new Apisix(scope: Construct, id: string, props?: ApisixProps)
 Name | Type | Description 
 -----|------|-------------
 **cluster** | <code>[ICluster](#aws-cdk-aws-ecs-icluster)</code> | <span></span>
+**envVar** | <code>Map<string, string></code> | <span></span>
 **vpc** | <code>[IVpc](#aws-cdk-aws-ec2-ivpc)</code> | <span></span>
 
 ### Methods

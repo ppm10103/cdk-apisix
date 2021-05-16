@@ -1,6 +1,6 @@
 import { Vpc, Port, IVpc } from '@aws-cdk/aws-ec2';
-import { NetworkLoadBalancedFargateService } from '@aws-cdk/aws-ecs-patterns';
 import * as ecs from '@aws-cdk/aws-ecs';
+import { NetworkLoadBalancedFargateService } from '@aws-cdk/aws-ecs-patterns';
 import * as efs from '@aws-cdk/aws-efs';
 import * as elbv2 from '@aws-cdk/aws-elasticloadbalancingv2';
 import * as iam from '@aws-cdk/aws-iam';

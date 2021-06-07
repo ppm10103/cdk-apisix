@@ -1,5 +1,4 @@
-const { AwsCdkConstructLibrary } = require('projen');
-const { Automation } = require('projen-automate-it');
+const { AwsCdkConstructLibrary, DependenciesUpgradeMechanism } = require('projen');
 
 const AUTOMATION_TOKEN = 'PROJEN_GITHUB_TOKEN';
 
@@ -10,9 +9,17 @@ const project = new AwsCdkConstructLibrary({
   name: 'cdk-apisix',
   description: 'CDK construct library to generate serverless Apache APISIX workload on AWS Fargate.',
   repository: 'https://github.com/pahud/cdk-apisix.git',
-  releaseBranches: ['main'],
   defaultReleaseBranch: 'main',
-  dependabot: false,
+  depsUpgrade: DependenciesUpgradeMechanism.githubWorkflow({
+    workflowOptions: {
+      labels: ['auto-approve', 'auto-merge'],
+      secret: AUTOMATION_TOKEN,
+    },
+  }),
+  autoApproveOptions: {
+    secret: 'GITHUB_TOKEN',
+    allowedUsernames: ['pahud'],
+  },
   cdkDependencies: [
     '@aws-cdk/core',
     '@aws-cdk/aws-ec2',
@@ -23,27 +30,11 @@ const project = new AwsCdkConstructLibrary({
     '@aws-cdk/aws-iam',
     '@aws-cdk/aws-logs',
   ],
-  deps: [
-    'projen-automate-it',
-  ],
-  bundledDeps: [
-    'projen-automate-it',
-  ],
   python: {
     distName: 'cdk-apisix',
     module: 'cdk_apisix',
   },
 });
-
-
-const automation = new Automation(project, {
-  automationToken: AUTOMATION_TOKEN,
-});
-
-automation.autoApprove();
-automation.autoMerge();
-automation.projenYarnUpgrade();
-
 
 const common_exclude = ['cdk.out', 'cdk.context.json', 'yarn-error.log'];
 project.npmignore.exclude(...common_exclude);

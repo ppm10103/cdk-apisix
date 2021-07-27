@@ -4,7 +4,7 @@ const AUTOMATION_TOKEN = 'PROJEN_GITHUB_TOKEN';
 
 const project = new AwsCdkConstructLibrary({
   authorAddress: 'pahudnet@gmail.com',
-  authorName: 'Pahud',
+  authorName: 'Pahud Hsieh',
   cdkVersion: '1.82.0',
   name: 'cdk-apisix',
   description: 'CDK construct library to generate serverless Apache APISIX workload on AWS Fargate.',

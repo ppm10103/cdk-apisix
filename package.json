@@ -29,7 +29,7 @@
     "start": "npx projen start"
   },
   "author": {
-    "name": "Pahud",
+    "name": "Pahud Hsieh",
     "email": "pahudnet@gmail.com",
     "organization": false
   },

@@ -37,10 +37,6 @@ const project = new AwsCdkConstructLibrary({
   },
 });
 
-project.package.addField('resolutions', {
-  xmldom: 'github:xmldom/xmldom#0.7.0',
-});
-
 const common_exclude = ['cdk.out', 'cdk.context.json', 'yarn-error.log'];
 project.npmignore.exclude(...common_exclude);
 project.gitignore.exclude(...common_exclude);

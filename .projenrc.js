@@ -31,6 +31,7 @@ const project = new AwsCdkConstructLibrary({
     '@aws-cdk/aws-iam',
     '@aws-cdk/aws-logs',
   ],
+  minNodeVersion: '12.20.0',
   python: {
     distName: 'cdk-apisix',
     module: 'cdk_apisix',

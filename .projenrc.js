@@ -31,11 +31,15 @@ const project = new AwsCdkConstructLibrary({
     '@aws-cdk/aws-iam',
     '@aws-cdk/aws-logs',
   ],
-  minNodeVersion: '12.20.0',
   python: {
     distName: 'cdk-apisix',
     module: 'cdk_apisix',
   },
+});
+
+project.package.addField('resolutions', {
+  'pac-resolver': '^5.0.0',
+  'set-value': '^4.0.1',
 });
 
 const common_exclude = ['cdk.out', 'cdk.context.json', 'yarn-error.log'];

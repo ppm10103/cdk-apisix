@@ -1,6 +1,5 @@
 const {
   AwsCdkConstructLibrary,
-  DependenciesUpgradeMechanism,
   DevEnvironmentDockerImage,
   Gitpod,
 } = require('projen');
@@ -15,13 +14,13 @@ const project = new AwsCdkConstructLibrary({
   description: 'CDK construct library to generate serverless Apache APISIX workload on AWS Fargate.',
   repository: 'https://github.com/pahud/cdk-apisix.git',
   defaultReleaseBranch: 'main',
-  depsUpgrade: DependenciesUpgradeMechanism.githubWorkflow({
+  depsUpgradeOptions: {
     ignoreProjen: false,
     workflowOptions: {
       labels: ['auto-approve', 'auto-merge'],
       secret: AUTOMATION_TOKEN,
     },
-  }),
+  },
   autoApproveOptions: {
     secret: 'GITHUB_TOKEN',
     allowedUsernames: ['pahud'],

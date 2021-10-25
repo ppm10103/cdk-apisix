@@ -21,6 +21,7 @@ const project = new AwsCdkConstructLibrary({
       secret: AUTOMATION_TOKEN,
     },
   },
+  minNodeVersion: '12.20.0',
   autoApproveOptions: {
     secret: 'GITHUB_TOKEN',
     allowedUsernames: ['pahud'],
@@ -85,3 +86,4 @@ project.npmignore.exclude(...common_exclude);
 project.gitignore.exclude(...common_exclude);
 
 project.synth();
+

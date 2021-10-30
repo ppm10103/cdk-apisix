@@ -173,6 +173,12 @@ Object {
         },
         "Port": 80,
         "Protocol": "HTTP",
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
+        ],
         "TargetType": "ip",
         "VpcId": Object {
           "Ref": "apisixdemoVpc276C38A9",
@@ -368,6 +374,12 @@ Object {
         },
         "Port": 9000,
         "Protocol": "HTTP",
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
+        ],
         "TargetType": "ip",
         "VpcId": Object {
           "Ref": "apisixdemoVpc276C38A9",
